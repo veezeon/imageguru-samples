@@ -3,7 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>ImageGuru</title>
     <style>
         img {
@@ -15,26 +15,30 @@
             background-position: 50% 50%;
         }
     </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 </head>
 <body>
-    <h1>Setup</h1>
-    <p>
-        API key
-        <input type="text" id="apiKey" style="width: 280px" /><br />
-        Go <a href="https://market.mashape.com/veezeon/imageguru" target="_blank">here</a> to get one
-    </p>
-    <h1>Query image</h1>
-    <p>Take a photo of one of available images below</p>
-    <input type="file" accept="image/*" id="imageToQuery">
-    <h4 id="result"></h4>
+    <div class="container-fluid">
+        <h1>Setup</h1>
+        <p>           
+            <label for="apiKey">API key</label>
+            <input type="text" id="apiKey" style="width: 280px" class="form-control"/><br />
+            Go <a href="https://market.mashape.com/veezeon/imageguru" target="_blank">here</a> to get one
+        </p>
+        <h1>Query image</h1>
+        <p>Take a photo of one of available images below</p>
+        <input type="file" accept="image/*" id="imageToQuery" class="form-control">
+        <h4 id="result"></h4>
 
-    <h1>Available images</h1>
-    <input type="button" value="Load" id="loadImagesButton" />
-    <div id="images">
+        <h1>Available images</h1>
+        <input type="button" value="Load" id="loadImagesButton" class="btn btn-default" />
+        <div id="images">
 
+        </div>
     </div>
-
     <script>
 
         (function () {
@@ -96,6 +100,7 @@
                 }
                 xhr.send();
             }
+
             function queryImage() {
                 if (this.files.length > 0 && this.files[0].size > 0) {
                     var $result = $("#result");
