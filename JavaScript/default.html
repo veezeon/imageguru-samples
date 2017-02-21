@@ -17,8 +17,8 @@
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -38,6 +38,7 @@
         <div id="images">
 
         </div>
+        <small>Posters from <a href="https://www.themoviedb.org/">https://www.themoviedb.org/</a></small>
     </div>
     <script>
 
@@ -48,8 +49,13 @@
             var key = document.cookie.substr(4);
             $("#apiKey").val(key);
 
-            function handleError() {
-                alert("An error has occurred");
+            function handleError(xhr) {
+                if (xhr.responseText) {
+                    var r = JSON.parse(xhr.responseText);
+                    alert(r.Message);
+                } else {
+                    alert("An error has occurred");
+                }
             }
 
             function addHeader(xhr) {
@@ -76,6 +82,9 @@
             }
 
             function loadImages() {
+                var $images = $("#images");
+                $images.empty();
+
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", uri + "catalog", true);
                 addHeader(xhr);
@@ -83,14 +92,9 @@
                 xhr.onload = function (e) {
                     if (this.status === 200) {
                         var result = JSON.parse(this.responseText);
-                        var $images = $("#images");
                         $.each(result,
                             function (index, item) {
-                                var $img = $("<img />")
-                                    .attr({
-                                        title: item
-                                    })
-                                    .appendTo($images);
+                                var $img = $("<img />").appendTo($images);
 
                                 loadImage($img.get(0), item);
                             });
@@ -104,7 +108,7 @@
             function queryImage() {
                 if (this.files.length > 0 && this.files[0].size > 0) {
                     var $result = $("#result");
-                    $result.text("Searching...");
+                    $result.text("Uploading...");
 
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", uri + "query", true);
@@ -112,7 +116,8 @@
 
                     xhr.onload = function (e) {
                         if (this.status === 200) {
-                            $result.text("ciao");
+                            var id = JSON.parse(this.responseText);
+                            $result.text(id);
                         } else if (this.status === 404) {
                             $result.text("Not found");
                         } else {
@@ -122,6 +127,7 @@
                     };
 
                     xhr.send(this.files[0]);
+                    this.value = "";
                 }
             }
 
